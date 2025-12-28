@@ -1,4 +1,4 @@
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { ForesightLink } from "@/components/web/ForeSightLink";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
+import { CommentSection } from "@/components/web/CommentSection";
 
 interface postIdRouteProps {
   params: Promise<{
@@ -16,7 +17,12 @@ interface postIdRouteProps {
 export default async function PostIdRoute({ params }: postIdRouteProps) {
   const { postId } = await params;
 
-  const post = await fetchQuery(api.posts.getPostsById, { postId: postId });
+  const [ post, preloadedComments ] = await Promise.all ([
+    await fetchQuery(api.posts.getPostsById, { postId: postId }),
+    await preloadQuery(api.comments.getCommentsByPostId, {
+      postId: postId
+    })
+  ])
 
   if (!post) {
     return (
@@ -56,10 +62,12 @@ export default async function PostIdRoute({ params }: postIdRouteProps) {
         <p className="text-sm text-muted-foreground">
           Posted On: {new Date(post._creationTime).toLocaleString()}
         </p>
-        <Separator />
+        <Separator className="my-8" />
         <p className="text-lg leading-relaxed text-foreground/90 whitespace-pre-wrap">
           {post.body}
         </p>
+        <Separator className="my-8" />
+        <CommentSection preloadedComments={preloadedComments} />
       </div>
     </div>
   );
