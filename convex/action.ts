@@ -47,7 +47,7 @@ export const createBlogAction = async (values: z.infer<typeof postSchema>) => {
       { token },
     );
     revalidatePath("/blog");
-  } catch (error) {
+  } catch (_error) {
     return {
       error: "Failed to create Post",
     };

@@ -6,7 +6,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-
 export const dynamic = "force-static";
 export const revalidate = 60;
 

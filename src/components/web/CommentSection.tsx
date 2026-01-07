@@ -1,24 +1,22 @@
 "use client";
 
-import { Loader2, MessageSquare } from "lucide-react";
-import { Card, CardContent, CardHeader } from "../ui/card";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { commentSchema } from "@/app/schemas/comment";
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { Loader2, MessageSquare } from "lucide-react";
 import { useParams } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import z from "zod";
-import { toast } from "sonner";
 import { useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type z from "zod";
+import { commentSchema } from "@/app/schemas/comment";
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Separator } from "../ui/separator";
-
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { Textarea } from "../ui/textarea";
 
 export function CommentSection(props: {
   preloadedComments: Preloaded<typeof api.comments.getCommentsByPostId>;
@@ -109,7 +107,7 @@ export function CommentSection(props: {
                   <p className="font-semibold text-sm">{comment.authorName}</p>
                   <p className="text-muted-foreground text-xs">
                     {new Date(comment._creationTime).toLocaleDateString(
-                      "en-US"
+                      "en-US",
                     )}
                   </p>
                 </div>

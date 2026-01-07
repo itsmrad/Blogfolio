@@ -12,6 +12,6 @@ export default defineSchema({
     postId: v.id("posts"),
     authorId: v.string(),
     authorName: v.string(),
-    body: v.string()
-  })
+    body: v.string(),
+  }),
 });
