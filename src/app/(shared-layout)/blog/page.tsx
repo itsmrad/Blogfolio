@@ -6,8 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-export const dynamic = "force-static";
-export const revalidate = 60;
+import { connection } from "next/server";
 
 export default function blogPage() {
   return (
@@ -28,6 +27,7 @@ export default function blogPage() {
 }
 
 const LoadBlogList = async () => {
+  await connection()
   const data = await fetchQuery(api.posts.getPosts);
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
