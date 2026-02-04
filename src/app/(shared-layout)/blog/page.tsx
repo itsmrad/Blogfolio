@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { connection } from "next/server";
+import { cacheLife, cacheTag } from "next/cache";
 
 export default function blogPage() {
   return (
@@ -27,7 +28,10 @@ export default function blogPage() {
 }
 
 const LoadBlogList = async () => {
-  await connection()
+  "use cache"
+  cacheLife("hours")
+  cacheTag("blog")
+  
   const data = await fetchQuery(api.posts.getPosts);
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

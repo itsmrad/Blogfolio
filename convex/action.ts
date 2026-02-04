@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchMutation } from "convex/nextjs";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { postSchema } from "@/app/schemas/blog";
@@ -46,7 +46,7 @@ export const createBlogAction = async (values: z.infer<typeof postSchema>) => {
       },
       { token },
     );
-    revalidatePath("/blog");
+    updateTag("/blog");
   } catch (_error) {
     return {
       error: "Failed to create Post",
