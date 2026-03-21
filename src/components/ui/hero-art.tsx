@@ -193,13 +193,15 @@ export const HeroArt = ({ className }: { className?: string }) => {
         {petalsData.map((_, i) => {
           const r1 = Math.abs(Math.sin(i * 11.11));
           const r2 = Math.abs(Math.sin(i * 22.22));
-          const rx = 160 + r1 * 180;
-          const ry = 280 + r2 * 200;
+          const rx = Math.round((160 + r1 * 180) * 100) / 100;
+          const ry = Math.round((280 + r2 * 200) * 100) / 100;
+          const pr = Math.round((1.2 + r1 * 2) * 100) / 100;
           return (
             <circle 
               key={`petal-${i}`}
               className="anim-petal fill-retro-red opacity-0"
-              cx={rx} cy={ry} r={1.2 + r1 * 2} 
+              cx={rx} cy={ry} r={pr} 
+              suppressHydrationWarning
             />
           );
         })}

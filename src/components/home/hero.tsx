@@ -151,7 +151,7 @@ export const MinimalistHero = ({
           className="z-20 flex flex-col justify-center h-full order-2 lg:order-1 text-center lg:text-left pt-8 lg:pt-0"
         >
           {/* Headings — per-character spring morph */}
-          <h1 className="text-6xl font-extrabold text-foreground font-heading leading-[0.9] tracking-tighter sm:text-7xl lg:text-8xl xl:text-[9rem] min-h-[8rem] sm:min-h-[10rem] lg:min-h-[13rem] xl:min-h-[18rem]">
+          <h1 className="text-6xl font-extrabold text-foreground font-heading leading-[0.9] tracking-tighter sm:text-7xl lg:text-8xl xl:text-[9rem] min-h-32 sm:min-h-40 lg:min-h-52 xl:min-h-72">
             <span className="block text-retro-red">
               <MorphingWord word={topic.part1} staggerBase={0} />
             </span>
