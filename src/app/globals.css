@@ -6,8 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jb-mono), ui-monospace, SFMono-Regular, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,6 +38,11 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  
+  /* Additional Aesthetic Colors */
+  --color-retro-red: var(--retro-red);
+  --color-deco-gold: var(--deco-gold);
+  
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,72 +50,99 @@
 }
 
 :root {
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --radius: 0.5rem; /* slightly sharper for Swiss precision */
+  
+  /* Japandi/Swiss Light Theme - Warm Sand Background, Deep Charcoal Text */
+  --background: oklch(0.97 0.01 85); /* Off-white #F4F1ED */
+  --foreground: oklch(0.20 0.01 260); /* Deep Charcoal #1A1A1A */
+  
+  --card: oklch(1 0 0); /* Pure White */
+  --card-foreground: oklch(0.20 0.01 260);
+  
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.541 0.281 293.009);
-  --primary-foreground: oklch(0.969 0.016 293.756);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.702 0.183 293.541);
-  --chart-1: oklch(0.811 0.111 293.571);
-  --chart-2: oklch(0.606 0.25 292.717);
-  --chart-3: oklch(0.541 0.281 293.009);
-  --chart-4: oklch(0.491 0.27 292.581);
-  --chart-5: oklch(0.432 0.232 292.759);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.541 0.281 293.009);
-  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.702 0.183 293.541);
+  --popover-foreground: oklch(0.20 0.01 260);
+  
+  --primary: oklch(0.20 0.01 260); /* Deep Charcoal as primary */
+  --primary-foreground: oklch(0.97 0.01 85);
+  
+  --secondary: oklch(0.92 0.01 85); /* Lighter sand */
+  --secondary-foreground: oklch(0.20 0.01 260);
+  
+  --muted: oklch(0.94 0.01 85);
+  --muted-foreground: oklch(0.45 0.01 260);
+  
+  --accent: oklch(0.90 0.02 85);
+  --accent-foreground: oklch(0.20 0.01 260);
+  
+  --destructive: oklch(0.60 0.20 20); /* Deep red */
+  
+  --border: oklch(0.88 0.01 85);
+  --input: oklch(0.88 0.01 85);
+  --ring: oklch(0.20 0.01 260);
+  
+  /* Accents */
+  --retro-red: oklch(0.65 0.25 25); /* #D92525 pure swiss racing red */
+  --deco-gold: oklch(0.75 0.15 80); /* #D4AF37 Gold/Brass */
+
+  --chart-1: oklch(0.65 0.25 25);
+  --chart-2: oklch(0.75 0.15 80);
+  --chart-3: oklch(0.40 0.05 160); /* Japandi Sage */
+  --chart-4: oklch(0.80 0.10 40); /* Warm terracotta */
+  --chart-5: oklch(0.30 0.05 280);
+  
+  --sidebar: oklch(0.97 0.01 85);
+  --sidebar-foreground: oklch(0.20 0.01 260);
+  --sidebar-primary: oklch(0.20 0.01 260);
+  --sidebar-primary-foreground: oklch(0.97 0.01 85);
+  --sidebar-accent: oklch(0.90 0.02 85);
+  --sidebar-accent-foreground: oklch(0.20 0.01 260);
+  --sidebar-border: oklch(0.88 0.01 85);
+  --sidebar-ring: oklch(0.20 0.01 260);
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.606 0.25 292.717);
-  --primary-foreground: oklch(0.969 0.016 293.756);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.38 0.189 293.745);
-  --chart-1: oklch(0.811 0.111 293.571);
-  --chart-2: oklch(0.606 0.25 292.717);
-  --chart-3: oklch(0.541 0.281 293.009);
-  --chart-4: oklch(0.491 0.27 292.581);
-  --chart-5: oklch(0.432 0.232 292.759);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.606 0.25 292.717);
-  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.38 0.189 293.745);
+  /* Japandi/Swiss Dark Theme - Deep Warm Charcoal, Crisp Off-White */
+  --background: oklch(0.18 0.01 260); /* Very Dark Off-Black */
+  --foreground: oklch(0.97 0.01 85); /* Sand text */
+  
+  --card: oklch(0.22 0.01 260); /* Slightly lighter panel */
+  --card-foreground: oklch(0.97 0.01 85);
+  
+  --popover: oklch(0.22 0.01 260);
+  --popover-foreground: oklch(0.97 0.01 85);
+  
+  --primary: oklch(0.97 0.01 85);
+  --primary-foreground: oklch(0.18 0.01 260);
+  
+  --secondary: oklch(0.25 0.01 260);
+  --secondary-foreground: oklch(0.97 0.01 85);
+  
+  --muted: oklch(0.25 0.01 260);
+  --muted-foreground: oklch(0.70 0.01 85);
+  
+  --accent: oklch(0.30 0.01 260);
+  --accent-foreground: oklch(0.97 0.01 85);
+  
+  --destructive: oklch(0.60 0.20 20);
+  
+  --border: oklch(0.30 0.01 260);
+  --input: oklch(0.30 0.01 260);
+  --ring: oklch(0.70 0.01 85);
+
+  --chart-1: oklch(0.65 0.25 25);
+  --chart-2: oklch(0.75 0.15 80);
+  --chart-3: oklch(0.40 0.05 160);
+  --chart-4: oklch(0.80 0.10 40);
+  --chart-5: oklch(0.30 0.05 280);
+  
+  --sidebar: oklch(0.18 0.01 260);
+  --sidebar-foreground: oklch(0.97 0.01 85);
+  --sidebar-primary: oklch(0.97 0.01 85);
+  --sidebar-primary-foreground: oklch(0.18 0.01 260);
+  --sidebar-accent: oklch(0.30 0.01 260);
+  --sidebar-accent-foreground: oklch(0.97 0.01 85);
+  --sidebar-border: oklch(0.30 0.01 260);
+  --sidebar-ring: oklch(0.70 0.01 85);
 }
 
 @layer base {
@@ -117,6 +150,36 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans relative antialiased selection:bg-retro-red selection:text-white;
+  }
+  
+  /* Background Grain Texture for retro feel */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 50;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Custom Grid Utility for Swiss Design */
+@layer utilities {
+  .swiss-grid {
+    @apply grid grid-cols-4 md:grid-cols-12 gap-px bg-border/40 border border-border/40;
+  }
+  .swiss-grid > * {
+    @apply bg-background;
+  }
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }

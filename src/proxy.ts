@@ -18,5 +18,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/blog/:path*", "/create"], // Specify the routes the middleware applies to
+  matcher: ["/create"], // Only protect routes that require authentication
 };
