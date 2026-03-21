@@ -1,28 +1,26 @@
 import { fetchQuery } from "convex/nextjs";
-import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-import { connection } from "next/server";
 import { cacheLife, cacheTag } from "next/cache";
+import { BlogArt } from "@/components/blog/blog-art";
+import { PostCard } from "@/components/blog/post-card";
+import { CinematicHeader } from "@/components/blog/cinematic-header";
 
 export default function blogPage() {
   return (
-    <div className="py-12">
-      <div className="text-center pb-12">
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Our Blog
-        </h1>
-        <p className="pt-4 max-w-2xl mx-auto text-xl text-muted-foreground">
-          Insights, thoughts & trends from our team
-        </p>
+    <div className="relative min-h-screen">
+      <BlogArt />
+      
+      <div className="pt-16 md:pt-24 pb-24 md:pb-32 max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full overflow-hidden">
+        <CinematicHeader title="Archive 01—26" subtitle="Intermediate to advanced insights on AI/ML, Web, and Android." />
+        
+        <div className="mt-16 md:mt-24">
+          <Suspense fallback={<SkeletonLoadingUi />}>
+            <LoadBlogList />
+          </Suspense>
+        </div>
       </div>
-      <Suspense fallback={<SkeletonLoadingUi />}>
-        <LoadBlogList />
-      </Suspense>
     </div>
   );
 }
@@ -33,41 +31,25 @@ const LoadBlogList = async () => {
   cacheTag("blog")
   
   const data = await fetchQuery(api.posts.getPosts);
+  
+  if (!data || data.length === 0) {
+    return (
+      <div className="w-full text-center py-32 border-t border-border/40">
+         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">No publications found.</p>
+      </div>
+    );
+  }
+
+  const [featuredPost, ...standardPosts] = data;
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {data?.map((post) => (
-        <Card key={post._id} className="pt-0">
-          <div className="relative h-48 w-full overflow-hidden">
-            <Image
-              src={
-                post.imageUrl ??
-                "https://images.unsplash.com/photo-1765238358559-81dd5b57c094?q=80&w=3687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              }
-              fill
-              alt={"post image"}
-              className="rounded-t-lg object-cover"
-            />
-          </div>
-          <CardContent>
-            <Link href={`/blog/${post._id}`}>
-              <h2 className="text-2xl font-bold hover:text-primary">
-                {post.title}
-              </h2>
-            </Link>
-            <p className="text-muted-foreground">{post.body}</p>
-          </CardContent>
-          <CardFooter>
-            <Link
-              href={`/blog/${post._id}`}
-              className={buttonVariants({
-                variant: "default",
-                className: "w-full",
-              })}
-            >
-              Read More
-            </Link>
-          </CardFooter>
-        </Card>
+    <div className="grid gap-y-24 gap-x-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start">
+      {featuredPost && (
+        <PostCard post={featuredPost} featured={true} />
+      )}
+      
+      {standardPosts.map((post) => (
+        <PostCard key={post._id} post={post} />
       ))}
     </div>
   );
@@ -75,13 +57,24 @@ const LoadBlogList = async () => {
 
 const SkeletonLoadingUi = () => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-y-24 gap-x-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
+      {/* Featured skeleton */}
+      <div className="md:col-span-2 lg:col-span-3 flex flex-col md:flex-row gap-8 md:gap-16 w-full items-center">
+         <Skeleton className="w-full md:w-3/5 aspect-video md:aspect-21/9 rounded-sm" />
+         <div className="flex-1 space-y-6 w-full">
+           <Skeleton className="h-4 w-32" />
+           <Skeleton className="h-16 w-full" />
+           <Skeleton className="h-12 w-3/4" />
+         </div>
+      </div>
+      {/* Standard skeletons */}
       {[...Array(6)].map((_, index) => (
-        <div key={index} className="flex flex-col space-y-3">
-          <Skeleton className="h-48 w-full rounded-xl" />
-          <div className="flex flex-col space-y-2">
-            <Skeleton className="h-6 w-full" />
-            <Skeleton className="h-6 w-2/3" />
+        <div key={index} className="flex flex-col space-y-6">
+          <Skeleton className="aspect-4/3 w-full rounded-sm" />
+          <div className="flex flex-col space-y-4">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-4 w-3/4" />
           </div>
         </div>
       ))}

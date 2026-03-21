@@ -1,8 +1,8 @@
-import { fetchQuery, preloadQuery } from "convex/nextjs";
+import { fetchQuery } from "convex/nextjs";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CommentSection } from "@/components/web/CommentSection";
@@ -42,17 +42,14 @@ export default async function PostIdRoute({ params }: postIdRouteProps) {
 
   const token = await getToken();
 
-  const [post, preloadedComments, userId] = await Promise.all([
-    await fetchQuery(api.posts.getPostsById, { postId: postId }),
-    await preloadQuery(api.comments.getCommentsByPostId, {
-      postId: postId,
-    }),
-    await fetchQuery(api.presence.getUserId, {}, { token }),
+  // Fetch post and comments for all users; userId only for authenticated users
+  const [post, comments, userId] = await Promise.all([
+    fetchQuery(api.posts.getPostsById, { postId: postId }),
+    fetchQuery(api.comments.getCommentsByPostId, { postId: postId }),
+    token
+      ? fetchQuery(api.presence.getUserId, {}, { token })
+      : Promise.resolve(null),
   ]);
-
-  if (!userId) {
-    return redirect("/auth/login");
-  }
 
   if (!post) {
     return (
@@ -100,7 +97,7 @@ export default async function PostIdRoute({ params }: postIdRouteProps) {
           {post.body}
         </p>
         <Separator className="my-8" />
-        <CommentSection preloadedComments={preloadedComments} />
+        <CommentSection comments={comments} isAuthenticated={!!userId} />
       </div>
     </div>
   );

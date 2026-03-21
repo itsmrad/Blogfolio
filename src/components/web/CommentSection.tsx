@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { Loader2, MessageSquare } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useTransition } from "react";
@@ -18,80 +18,40 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
 
+interface Comment {
+  _id: string;
+  _creationTime: number;
+  postId: string;
+  authorId: string;
+  authorName: string;
+  body: string;
+}
+
 export function CommentSection(props: {
-  preloadedComments: Preloaded<typeof api.comments.getCommentsByPostId>;
+  comments: Comment[];
+  isAuthenticated?: boolean;
 }) {
-  const params = useParams<{ postId: Id<"posts"> }>();
-  const data = usePreloadedQuery(props.preloadedComments);
-  const [isPending, startTransition] = useTransition();
-
-  const createComment = useMutation(api.comments.createComment);
-  const form = useForm({
-    resolver: zodResolver(commentSchema),
-    defaultValues: {
-      body: "",
-      postId: params.postId,
-    },
-  });
-
-  async function onSubmit(data: z.infer<typeof commentSchema>) {
-    startTransition(async () => {
-      try {
-        await createComment(data);
-        form.reset();
-        toast.success("Comment posted");
-      } catch {
-        toast.error("Failed to create post");
-      }
-    });
-  }
-
-  if (data === undefined) {
-    return <p>loading...</p>;
-  }
+  const { comments } = props;
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-2 border-b">
         <MessageSquare className="size-5" />
-        <h2 className="text-xl font-bold">{data.length} Comments</h2>
+        <h2 className="text-xl font-bold">{comments.length} Comments</h2>
       </CardHeader>
       <CardContent className="space-y-8">
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <Controller
-            name="body"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field>
-                <FieldLabel>Full Name</FieldLabel>
-                <Textarea
-                  aria-invalid={fieldState.invalid}
-                  placeholder="Share your thoughts"
-                  {...field}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
+        {props.isAuthenticated ? (
+          <CommentForm />
+        ) : (
+          <div className="text-center py-4 text-muted-foreground">
+            <a href="/auth/login" className="text-primary underline hover:text-primary/80">Sign in</a> to leave a comment.
+          </div>
+        )}
 
-          <Button disabled={isPending}>
-            {isPending ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                <span>Loading...</span>
-              </>
-            ) : (
-              <span>Comment</span>
-            )}
-          </Button>
-        </form>
-
-        {data?.length > 0 && <Separator />}
+        {comments.length > 0 && <Separator />}
 
         <section className="space-y-6">
-          {data?.map((comment) => (
+          {comments.map((comment) => (
             <div key={comment._id} className="flex gap-4">
               <Avatar className="size-10 shrink-0">
                 <AvatarImage
@@ -121,5 +81,64 @@ export function CommentSection(props: {
         </section>
       </CardContent>
     </Card>
+  );
+}
+
+function CommentForm() {
+  const params = useParams<{ postId: Id<"posts"> }>();
+  const [isPending, startTransition] = useTransition();
+
+  const createComment = useMutation(api.comments.createComment);
+  const form = useForm({
+    resolver: zodResolver(commentSchema),
+    defaultValues: {
+      body: "",
+      postId: params.postId,
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof commentSchema>) {
+    startTransition(async () => {
+      try {
+        await createComment(data);
+        form.reset();
+        toast.success("Comment posted");
+      } catch {
+        toast.error("Failed to create post");
+      }
+    });
+  }
+
+  return (
+    <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <Controller
+        name="body"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field>
+            <FieldLabel>Full Name</FieldLabel>
+            <Textarea
+              aria-invalid={fieldState.invalid}
+              placeholder="Share your thoughts"
+              {...field}
+            />
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} />
+            )}
+          </Field>
+        )}
+      />
+
+      <Button disabled={isPending}>
+        {isPending ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+            <span>Loading...</span>
+          </>
+        ) : (
+          <span>Comment</span>
+        )}
+      </Button>
+    </form>
   );
 }
